@@ -1,0 +1,54 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 27/03/2020, 11:26:24
+    Author     : Plebani
+*/
+
+td.tipo { 
+	width: 20px;
+	text-align: center;
+}
+
+td.pessoa {
+	width: 200px;
+}
+
+td.descricao {
+}
+
+td.valor { 
+	width: 100px;
+	text-align: center;
+}
+
+td.vencimento { 
+	width: 100px;
+	text-align: center;
+}
+
+td.pagamento { 
+	width: 100px;
+	text-align: center;
+}
+
+td.situacao { 
+	width: 80px;
+	text-align: center;
+}
+
+td.acoes { 
+	width: 40px;
+	text-align: center;
+}
+
+.grid .receita {
+	color: #0000ff;
+}
+
+.grid .despesa {
+	color: #c23030;
+}

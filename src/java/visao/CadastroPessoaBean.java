@@ -1,0 +1,124 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package visao;
+
+import Repository.RamosAtividade;
+import Service.GestaoPessoas;
+import Service.RegraNegocioExpextion;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import modelo.Pessoa;
+import modelo.RamoAtividade;
+import modelo.TipoPessoa;
+import util.FacesUtil;
+import util.Repositorios;
+
+@ManagedBean
+@SessionScoped
+/**
+ *
+ * @author Plebani
+ */
+public class CadastroPessoaBean implements Serializable{
+    private Pessoa pessoa = new Pessoa();
+    private List<Pessoa> pessoas = new ArrayList<>();
+    private List<RamoAtividade> ramosAtividade = new ArrayList<>();
+    private boolean pessoaFisica;
+    private boolean pessoaJuridica;
+    private Repositorios repositorios = new Repositorios();
+    
+    @PostConstruct
+    public void init(){
+        this.pessoaFisica = false;
+        this.pessoaJuridica = false;
+        
+        RamosAtividade ramos  = this.repositorios.getRamosAtividade();  
+        this.ramosAtividade = ramos.todos();
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public List<Pessoa> getPessoas() {
+        return pessoas;
+    }
+
+    public void setPessoas(List<Pessoa> pessoas) {
+        this.pessoas = pessoas;
+    }
+    
+    public TipoPessoa[] getTipoPessoas(){
+        return TipoPessoa.values();
+    }
+
+    public List<RamoAtividade> getRamosAtividade() {
+        return ramosAtividade;
+    }
+
+    public boolean isPessoaFisica() {
+        return pessoaFisica;
+    }
+
+    public boolean isPessoaJuridica() {
+        return pessoaJuridica;
+    }
+    
+    public void cadastrar(){
+        System.out.println("Codigo: "+ this.pessoa.getCodigo());
+        System.out.println("Nome: "+this.pessoa.getNome());
+        System.out.println("Email: "+this.pessoa.getEmail());
+        System.out.println("Tipo Pessoa: "+this.pessoa.getTipoPessoa().getDescricao());
+        //System.out.println("Ramo Atividade: "+this.pessoa.getRamoAtividade().getDescricao());
+        
+        this.pessoas.add(this.pessoa);
+        
+        GestaoPessoas gestaoPessoas = new GestaoPessoas(this.repositorios.getPessoas());
+        
+        try{
+            gestaoPessoas.salvar(this.pessoa);
+            this.pessoa = new Pessoa();
+
+            String msg = "Cadastro efetuado com sucesso!";
+            FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_INFO, msg, msg);
+    
+        }catch (RegraNegocioExpextion e){
+            FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+        }
+        
+        this.pessoa = new Pessoa();
+        
+    }
+    
+    public void tipoPessoa(ValueChangeEvent event){
+        this.pessoa.setTipoPessoa((TipoPessoa)event.getNewValue());
+        
+        if (this.pessoa.getTipoPessoa().getDescricao().equalsIgnoreCase("fisica")){
+            this.pessoaFisica = true;
+            this.pessoaJuridica = false;
+            this.pessoa.setRamoAtividade(null);
+        }else{
+            this.pessoaJuridica = true;
+            this.pessoaFisica = false;
+            this.pessoa.setDataNascimento(null);
+        }
+        
+        FacesContext.getCurrentInstance().renderResponse(); // Pular para ultima etapa do ciclo de vida do JSF
+    }    
+        
+    
+}
