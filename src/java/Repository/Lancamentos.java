@@ -17,5 +17,6 @@ public interface Lancamentos {
     public void remover(Lancamento lancamento);
     public Lancamento guardar(Lancamento lancamento);
     public Lancamento comDadosIguais(Lancamento lancamento);
+    public Lancamento porCodigo (Integer codigo);
     
 }
