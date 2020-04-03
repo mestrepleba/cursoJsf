@@ -31,7 +31,7 @@
                         infoClass="info" 
                         style="font-weight: bold"/>
 
-            <h:panelGrid columns="2"
+            <h:panelGrid columns="2" id="panel"
                          styleClass="form-grid">
                 <h:outputLabel value="Tipo"/>
                 <h:selectOneRadio value="#{cadastroLancamentoBean.lancamento.tipo}" 
@@ -74,15 +74,12 @@
                     <f:convertDateTime pattern="dd/MM/yyyy"/>
                 </h:inputText>
 
-                <h:outputLabel />
+                <h:outputLabel/>
                 <h:panelGroup>
-                    <h:selectBooleanCheckbox id="pagoCheckBox" 
-                                             value="#{cadastroLancamentoBean.lancamento.pago}" 
-                                             immediate="true"
-                                             onchange="submit()"
-                                             valueChangeListener="#{cadastroLancamentoBean.lancamentoPagoModificado}"
-                                             label="Conta Paga?"/>
-                    <h:outputLabel value="Conta Paga?" for="pagoCheckBox"/>
+                        <h:selectBooleanCheckbox id="pagoCheckbox" value="#{cadastroLancamentoBean.lancamento.pago}"
+                                immediate="true" valueChangeListener="#{cadastroLancamentoBean.lancamentoPagoModificado}" 
+                                onchange="jsf.ajax.request(this, event, {execute: '@form', render: 'frm:panel'})"/>
+                        <h:outputLabel value="Conta paga" for="pagoCheckbox"/>
                 </h:panelGroup>
 
                 <h:outputLabel value="Data Pagamento" rendered="#{cadastroLancamentoBean.lancamento.pago}"/>
@@ -98,7 +95,9 @@
 
                 <h:outputLabel/>
                 <h:commandButton value="Salvar"
-                                 action="#{cadastroLancamentoBean.salvar}"/>
+                                 action="#{cadastroLancamentoBean.salvar}">
+                    <f:ajax execute="@form" render="@all"/>
+                </h:commandButton>
 
             </h:panelGrid>
         </h:form>
