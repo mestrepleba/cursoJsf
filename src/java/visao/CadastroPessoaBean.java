@@ -14,9 +14,9 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.view.ViewScoped;
 import modelo.Pessoa;
 import modelo.RamoAtividade;
 import modelo.TipoPessoa;
@@ -24,7 +24,7 @@ import util.FacesUtil;
 import util.Repositorios;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 /**
  *
  * @author Plebani
@@ -50,8 +50,16 @@ public class CadastroPessoaBean implements Serializable{
         return pessoa;
     }
 
-    public void setPessoa(Pessoa pessoa) {
+    public void setPessoa(Pessoa pessoa) throws CloneNotSupportedException {
         this.pessoa = pessoa;
+        
+        //Colocado devido a tag viewparam colocada na tela Consulta lancamento.
+        if (this.pessoa == null){
+            this.pessoa = new Pessoa();            
+        }else{
+            this.setaTipoPessoa();
+            this.pessoa = (Pessoa) pessoa.clone();            
+        }
     }
 
     public List<Pessoa> getPessoas() {
@@ -78,47 +86,52 @@ public class CadastroPessoaBean implements Serializable{
         return pessoaJuridica;
     }
     
-    public void cadastrar(){
-        System.out.println("Codigo: "+ this.pessoa.getCodigo());
-        System.out.println("Nome: "+this.pessoa.getNome());
-        System.out.println("Email: "+this.pessoa.getEmail());
-        System.out.println("Tipo Pessoa: "+this.pessoa.getTipoPessoa().getDescricao());
-        //System.out.println("Ramo Atividade: "+this.pessoa.getRamoAtividade().getDescricao());
-        
-        this.pessoas.add(this.pessoa);
-        
+    public void salvar(){
+        String msg;
         GestaoPessoas gestaoPessoas = new GestaoPessoas(this.repositorios.getPessoas());
         
+         
         try{
-            gestaoPessoas.salvar(this.pessoa);
+            gestaoPessoas.salvar(this.pessoa);            
+             
+            if (this.isEditando()){
+                msg = "Alteracao efetuada com sucesso!";
+            }else{
+               msg = "Cadastro efetuado com sucesso!";
+            }
+            
             this.pessoa = new Pessoa();
-
-            String msg = "Cadastro efetuado com sucesso!";
+            
             FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_INFO, msg, msg);
     
         }catch (RegraNegocioExpextion e){
             FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
         }
-        
-        this.pessoa = new Pessoa();
-        
     }
     
-    public void tipoPessoa(ValueChangeEvent event){
+    public void defineTipoPessoa(ValueChangeEvent event){
         this.pessoa.setTipoPessoa((TipoPessoa)event.getNewValue());
         
+        this.setaTipoPessoa();
+        
+        FacesContext.getCurrentInstance().renderResponse(); // Pular para ultima etapa do ciclo de vida do JSF
+    }    
+    
+    public boolean isEditando(){
+        return this.pessoa.getCodigo() != null;
+    }
+        
+    protected void setaTipoPessoa(){
+         System.out.println("Entrou no metodo setaTipoPessoa()");   
+         
         if (this.pessoa.getTipoPessoa().getDescricao().equalsIgnoreCase("fisica")){
             this.pessoaFisica = true;
             this.pessoaJuridica = false;
-            this.pessoa.setRamoAtividade(null);
+            this.pessoa.setRamoAtividade(null);            
         }else{
             this.pessoaJuridica = true;
             this.pessoaFisica = false;
             this.pessoa.setDataNascimento(null);
         }
-        
-        FacesContext.getCurrentInstance().renderResponse(); // Pular para ultima etapa do ciclo de vida do JSF
-    }    
-        
-    
+    }
 }

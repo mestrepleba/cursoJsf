@@ -1,6 +1,7 @@
 package modelo;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.jar.Attributes;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Pessoa implements Serializable {
+public class Pessoa implements Serializable, Cloneable {
 
 	private Integer codigo;
 	private String nome;
@@ -65,6 +66,7 @@ public class Pessoa implements Serializable {
             this.email = email;
         }        
         
+        @Column(name = "dataNascimento")
         public Date getDataNascimento() {
             return dataNascimento;
         }
@@ -106,5 +108,9 @@ public class Pessoa implements Serializable {
 			return false;
 		return true;
 	}
+        
+        public Object clone() throws CloneNotSupportedException{
+            return super.clone();
+        }
 	
 }

@@ -20,7 +20,6 @@ import util.FacesUtil;
 import util.Repositorios;
 
 @ManagedBean
-@SessionScoped
 /**
  *
  * @author Plebani

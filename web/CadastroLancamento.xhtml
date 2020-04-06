@@ -1,24 +1,22 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <f:metadata>
-        <f:viewParam name="codigo" value="#{cadastroLancamentoBean.lancamento}"/>
-    </f:metadata>
-    <h:head>
-        <title>#{cadastroLancamentoBean.editando ? 'Editando Lancamento' : 'Novo Lancamento'}</title>
+<ui:composition template="/template/LayoutPadrao.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core">
 
-        <h:outputStylesheet library="css" name="consulta-lancamento.css"/>
-        <h:outputStylesheet library="css" name="sistema.css"/>
-    </h:head>
-    <h:body>
+    <ui:define name="titulo">#{cadastroLancamentoBean.editando ? 'Editando lançamento' : 'Novo lançamento'}</ui:define>
+
+    <ui:define name="conteudo">
+        <f:metadata>
+            <f:viewParam name="codigo" value="#{cadastroLancamentoBean.lancamento}"/>
+        </f:metadata>
+
         <h:form id="frm">
             <h:panelGrid columns="2">
                 <h:graphicImage value="/imagens/tela.png" />   
-                
+
                 <h1>#{cadastroLancamentoBean.editando ? 'Editando Lancamento' : 'Novo Lancamento'}</h1>
-                
+
             </h:panelGrid>    
 
             <h:button value="Novo" outcome="CadastroLancamento"/>
@@ -44,12 +42,12 @@
                 </h:selectOneRadio>                
 
                 <h:outputLabel value="Pessoa"/>
-				<h:selectOneMenu value="#{cadastroLancamentoBean.lancamento.pessoa}"
-						required="true" label="Pessoa">
-					<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-					<f:selectItems value="#{cadastroLancamentoBean.pessoas}"
-						var="pessoa" itemValue="#{pessoa}" itemLabel="#{pessoa.nome}"/>
-				</h:selectOneMenu>
+                <h:selectOneMenu value="#{cadastroLancamentoBean.lancamento.pessoa}"
+                                 required="true" label="Pessoa">
+                    <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                    <f:selectItems value="#{cadastroLancamentoBean.pessoas}"
+                                   var="pessoa" itemValue="#{pessoa}" itemLabel="#{pessoa.nome}"/>
+                </h:selectOneMenu>
 
                 <h:outputLabel value="Descricao"/>
                 <h:inputText value="#{cadastroLancamentoBean.lancamento.descricao}" 
@@ -76,10 +74,10 @@
 
                 <h:outputLabel/>
                 <h:panelGroup>
-                        <h:selectBooleanCheckbox id="pagoCheckbox" value="#{cadastroLancamentoBean.lancamento.pago}"
-                                immediate="true" valueChangeListener="#{cadastroLancamentoBean.lancamentoPagoModificado}" 
-                                onchange="jsf.ajax.request(this, event, {execute: '@form', render: 'frm:panel'})"/>
-                        <h:outputLabel value="Conta paga" for="pagoCheckbox"/>
+                    <h:selectBooleanCheckbox id="pagoCheckbox" value="#{cadastroLancamentoBean.lancamento.pago}"
+                                             immediate="true" valueChangeListener="#{cadastroLancamentoBean.lancamentoPagoModificado}" 
+                                             onchange="jsf.ajax.request(this, event, {execute: '@form', render: 'frm:panel'})"/>
+                    <h:outputLabel value="Conta paga" for="pagoCheckbox"/>
                 </h:panelGroup>
 
                 <h:outputLabel value="Data Pagamento" rendered="#{cadastroLancamentoBean.lancamento.pago}"/>
@@ -98,8 +96,8 @@
                                  action="#{cadastroLancamentoBean.salvar}">
                     <f:ajax execute="@form" render="@all"/>
                 </h:commandButton>
-
             </h:panelGrid>
+
         </h:form>
-    </h:body>
-</html>
+    </ui:define>
+</ui:composition>
