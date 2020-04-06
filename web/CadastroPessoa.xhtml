@@ -53,7 +53,7 @@
 
                 <h:outputLabel value="Data de Nascimento"/>
                 <h:inputText value="#{cadastroPessoaBean.pessoa.dataNascimento}" size="12" label="Data Nascimento">
-                    <f:convertDateTime parent="dd/MM/yyyy"/>
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>
                 </h:inputText>
 
                 <h:outputLabel value="Ramo Atividade"/>
@@ -63,7 +63,7 @@
                 </h:selectOneMenu> 
 
                 <h:outputLabel/>
-                <h:commandButton value="Cadastrar" action="#{cadastroPessoaBean.salvar}">
+                <h:commandButton value="Salvar" action="#{cadastroPessoaBean.salvar}">
                     <f:ajax execute="@form" render="@all"/>
                 </h:commandButton>
             </h:panelGrid> 

@@ -5,9 +5,12 @@
 	<h:graphicImage value="/imagens/logo.png" styleClass="logo" />
 				
 	<div class="menu">
+            <h:form>
 		<h:link outcome="Home">Home</h:link>
 		<h:link outcome="ConsultaLancamento">Lançamentos</h:link>
                 <h:link outcome="ConsultaPessoas">Pessoas</h:link>
+                <h:commandLink action="#{segurancaBean.sair()}" >Sair</h:commandLink>
+            </h:form>
 	</div>
 	
 </ui:composition>

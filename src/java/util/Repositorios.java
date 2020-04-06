@@ -10,7 +10,7 @@ import Repository.Pessoas;
 import Repository.RamosAtividade;
 import Repository.infra.LancamentosHibernate;
 import Repository.infra.PessoasHibernate;
-import Repository.infra.RamosAtividadeHibernate;
+import Repository.infra.RamosAtividadeHibernate_old;
 import java.io.Serializable;
 import org.hibernate.Session;
 
@@ -29,7 +29,7 @@ public class Repositorios implements Serializable{
     }
     
     public RamosAtividade getRamosAtividade(){
-        return new RamosAtividadeHibernate(this.getSession());
+        return new RamosAtividadeHibernate_old(this.getSession());
     }
     
     private Session getSession(){

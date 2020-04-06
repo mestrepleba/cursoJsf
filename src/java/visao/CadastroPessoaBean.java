@@ -89,9 +89,7 @@ public class CadastroPessoaBean implements Serializable{
     public void salvar(){
         String msg;
         GestaoPessoas gestaoPessoas = new GestaoPessoas(this.repositorios.getPessoas());
-        
-         
-        try{
+               
             gestaoPessoas.salvar(this.pessoa);            
              
             if (this.isEditando()){
@@ -103,10 +101,6 @@ public class CadastroPessoaBean implements Serializable{
             this.pessoa = new Pessoa();
             
             FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_INFO, msg, msg);
-    
-        }catch (RegraNegocioExpextion e){
-            FacesUtil.adicionarMensagem(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
-        }
     }
     
     public void defineTipoPessoa(ValueChangeEvent event){
@@ -121,17 +115,19 @@ public class CadastroPessoaBean implements Serializable{
         return this.pessoa.getCodigo() != null;
     }
         
-    protected void setaTipoPessoa(){
-         System.out.println("Entrou no metodo setaTipoPessoa()");   
-         
-        if (this.pessoa.getTipoPessoa().getDescricao().equalsIgnoreCase("fisica")){
-            this.pessoaFisica = true;
-            this.pessoaJuridica = false;
-            this.pessoa.setRamoAtividade(null);            
-        }else{
-            this.pessoaJuridica = true;
-            this.pessoaFisica = false;
-            this.pessoa.setDataNascimento(null);
+    public void setaTipoPessoa() {
+
+        if (this.pessoa != null && this.pessoa.getTipoPessoa() != null) {
+            if (this.pessoa.getTipoPessoa().getDescricao().equalsIgnoreCase("fisica")) {
+                this.pessoaFisica = true;
+                this.pessoaJuridica = false;
+                this.pessoa.setRamoAtividade(null);
+            } else {
+                this.pessoaJuridica = true;
+                this.pessoaFisica = false;
+                this.pessoa.setDataNascimento(null);
+            }
         }
+
     }
 }

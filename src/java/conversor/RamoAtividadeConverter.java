@@ -6,9 +6,11 @@
 package conversor;
 
 import Repository.RamosAtividade;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import modelo.RamoAtividade;
 import util.Repositorios;
@@ -22,22 +24,33 @@ import util.Repositorios;
 public class RamoAtividadeConverter implements Converter{
     private Repositorios repositorios = new Repositorios();
 
-     @Override
+@Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         RamoAtividade retorno = new RamoAtividade();
-        
-        if (value !=null){
-            RamosAtividade ramos = this.repositorios.getRamosAtividade();
+        RamosAtividade ramos = this.repositorios.getRamosAtividade();
+
+        if (value != null && !value.equals("")) {
             retorno = ramos.porCodigo(new Integer(value));
+
+            if (retorno == null) {
+                String descricaoErro = "Ramo de Atividade não existe.";
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        descricaoErro, descricaoErro);
+                throw new ConverterException(message);
+            }
         }
+
         return retorno;
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return ((RamoAtividade)value).getCodigo().toString();
-    }
+        if (value != null) {
+            Integer codigo = ((RamoAtividade) value).getCodigo();
+            return codigo == null ? "" : codigo.toString();
+        }
+        return null;
 
-   
+    }
     
 }

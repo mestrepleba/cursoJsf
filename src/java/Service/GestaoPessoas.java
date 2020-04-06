@@ -21,7 +21,7 @@ public class GestaoPessoas {
         this.pessoas = pessoas;
     }
     
-    public void salvar(Pessoa pessoa) throws RegraNegocioExpextion {
+    public void salvar(Pessoa pessoa){
         this.pessoas.guardar(pessoa);
     }
     

@@ -27,5 +27,4 @@ public class FacesUtil {
         
         return request.getAttribute(name);
     }
-    
 }
